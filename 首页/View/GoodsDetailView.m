@@ -27,10 +27,15 @@
     UILabel *_selectedColorLabel;
 }
 
+
+
+
+
 @end
 
 
 @implementation GoodsDetailView
+
 
 -(void)configUI
 {
@@ -49,6 +54,15 @@
         _selectModel.title = _Model.titleText;
         _selectModel.goodsId = _Model.goodsId;
     }
+   
+
+
+    
+    
+    
+    
+
+    
 //
 //    
 //    [backView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -210,7 +224,7 @@
     [container addSubview:numberButton];
 
     
-    UILabel *colorLab = [Tool labelWithTitle:@"颜色" color:The_TitleColor fontSize:15 alignment:0];
+    UILabel *colorLab = [Tool labelWithTitle:@"净含量" color:The_TitleColor fontSize:15 alignment:0];
     [container addSubview:colorLab];
     [colorLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_offset(10);
@@ -310,7 +324,7 @@
     
     UIButton *lastColorBtn = [_ColorBtnArr lastObject];
 
-    UILabel *typeLab = [Tool labelWithTitle:@"类型" color:The_TitleColor fontSize:15 alignment:0];
+    UILabel *typeLab = [Tool labelWithTitle:@"类别" color:The_TitleColor fontSize:15 alignment:0];
     [container addSubview:typeLab];
     
     [typeLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -680,7 +694,7 @@
             dic = mulDic;
             
         }
-        [HttpRequestManager postShoppingCarAddRequest:dic viewcontroller:nil finishBlock:^(NSDictionary *dic) {
+        [HttpRequestManager postShoppingCarAddRequest:dic viewcontroller:_vc finishBlock:^(NSDictionary *dic) {
             if ([dic[@"code"] intValue] == 200) {
                 
                 //创建一个消息对象
@@ -705,17 +719,24 @@
         OrderDetailModel *orderModel = [[OrderDetailModel alloc]init];
         [orderModel.goodsArr  addObject:_selectModel];
         vc.model = orderModel;
-        UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        [nav pushViewController:vc animated:YES];
+        [_vc.navigationController pushViewController:vc animated:YES];
         [self removeFromSuperview];
+
     }
+    
+
+    
+    
+
 }
 
 - (NSString*)dictionaryToJson:(NSDictionary *)dic
+
 {
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&parseError];
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
 }
 
 
@@ -724,11 +745,17 @@
 {
     NSString *typeStr = nil;
     NSString *colorStr = nil;
+    
+    
+    
     for (int i = 0; i < _typeBtnArr.count; i++) {
         UIButton *tyoeBtn = _typeBtnArr[i];
         if (tyoeBtn.selected && [tyoeBtn isEnabled]) {
             typeStr = _Model.typeArr[i];
         }
+        
+      
+        
     }
     
     for (int i = 0; i < _ColorBtnArr.count; i++) {
@@ -854,6 +881,7 @@
 
     }
     
+
     return YES;
 }
 

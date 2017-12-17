@@ -177,21 +177,20 @@
 
 -(void)payAction:(UIButton *)btn
 {
-    __weak __typeof(self)weakSelf = self;
-    OrderModel *model = weakSelf.tableViewDataArray[btn.tag - 100];
+    
     //选择哪种支付方式
-    [[MyAlert manage] payWaysAlert:^(NSString *str) {
-        
+    [[MyAlert manage]payWaysAlert:^(NSString *str) {
+        OrderModel *model = _tableViewDataArray[btn.tag - 100];
         NSDictionary *dic = @{@"receiptId":model.ID,
                               @"payMethod":str
                               };
-
-        [HttpRequestManager postOrderRepayRequest:dic viewcontroller:weakSelf finishBlock:^(NSDictionary *data) {
+        
+        [HttpRequestManager postOrderRepayRequest:dic viewcontroller:self finishBlock:^(NSDictionary *data) {
             if (data[@"pk"]) {
                 PayWebViewController *vc = [[PayWebViewController alloc]init];
                 vc.isFirst = @"first";
                 vc.html = data[@"pk"];
-                [weakSelf.navigationController pushViewController:vc animated:YES];
+                [self.navigationController pushViewController:vc animated:YES];
             }
         }];
     }];
@@ -205,12 +204,12 @@
 {
     OrderModel *model = _tableViewDataArray[btn.tag - 10];
     
-    __weak __typeof(self)weakSelf = self;
+    
     [[MyAlert manage] showBtnAlertWithTitle:@"提醒" detailTitle:@"是否删除订单？" confirm:^{
         NSDictionary *dic = @{@"receiptId":model.ID,
                               };
         
-        [HttpRequestManager postOrderDeletRequest:dic viewcontroller:weakSelf finishBlock:^(NSDictionary *data) {
+        [HttpRequestManager postOrderDeletRequest:dic viewcontroller:self finishBlock:^(NSDictionary *data) {
             
         }];
     }];
@@ -222,18 +221,19 @@
 
 -(void)confirmAction:(UIButton *)btn
 {
-    __weak __typeof(self)weakSelf = self;
-    OrderModel *model = weakSelf.tableViewDataArray[btn.tag - 1000];
+    
     [[MyAlert manage] showBtnAlertWithTitle:@"提醒" detailTitle:@"是否确认收货？" confirm:^{
         
-        
+        OrderModel *model = _tableViewDataArray[btn.tag - 1000];
         NSDictionary *dic = @{@"receiptId":model.ID,
                               };
         
-        [HttpRequestManager postOrderSouhuoRequest:dic viewcontroller:weakSelf finishBlock:^(NSDictionary *data) {
+        [HttpRequestManager postOrderSouhuoRequest:dic viewcontroller:self finishBlock:^(NSDictionary *data) {
             
         }];
     }];
+    
+   
     
 }
 -(void)pingrunAction:(UIButton *)btn
@@ -242,17 +242,17 @@
     OrderModel *model = _tableViewDataArray[btn.tag - 10000];
     NSDictionary *dic = @{@"receiptId":model.ID,
                           };
-    __weak __typeof(self)weakSelf = self;
-    [HttpRequestManager postOrderCommentListRequest:dic viewcontroller:weakSelf finishBlock:^(NSDictionary *data) {
+    
+    [HttpRequestManager postOrderCommentListRequest:dic viewcontroller:self finishBlock:^(NSDictionary *data) {
         NSArray *arr = data[@"info"];
         
         GoodsCommentVC *vc = [[GoodsCommentVC alloc]init];
         vc.orderModel = model;
         [vc setCallback:^{
-            weakSelf.callback();
+            self.callback();
         }];
         vc.pinglunListArr = arr;
-        [weakSelf.navigationController pushViewController:vc animated:YES];
+        [self.navigationController pushViewController:vc animated:YES];
     }];
 }
 
@@ -290,7 +290,7 @@
 {
     
     OrderModel *model = _tableViewDataArray[indexPath.row];
-    OrderCell* cell = [[OrderCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OrderCell" InspectModel:model IndexPath:indexPath];
+    OrderCell* cell = [[OrderCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OrderCell" InspectModel:model IndexPath:indexPath VC:self];
     cell.model = model;
     cell.delectBtn.tag = 10 + indexPath.row;
     cell.payBtn.tag = 100 + indexPath.row;

@@ -167,6 +167,7 @@
     if (!cell) {
         cell = [[CommentCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid];
     }
+    cell.vc = self;
     cell.model = model;
 //    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 //

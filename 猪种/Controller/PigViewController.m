@@ -48,6 +48,11 @@
 
     self.sectionTitles = @[@"", @"", @"市场价变动图", @"市仓图", @"价格明细"];
 
+    [[[ZHPigNetwork alloc] init] versionDetectionWithCallback:^(BOOL status, NSString *message, id obj, NSString *code) {
+        [[MyAlert manage]showBtnAlertWithTitle:@"温馨提示" detailTitle:@"有新版本更新，请升级" confirm:^{
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:obj]];
+        }];
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -55,12 +60,6 @@
     [self loadPigInfo];
     [self checkNeedRealNameAuth];
     [self.pigBannerView manageExceptionWhenAutoScroll];
-
-    [[[ZHPigNetwork alloc] init] versionDetectionWithCallback:^(BOOL status, NSString *message, id obj, NSString *code) {
-        [[MyAlert manage]showBtnAlertWithTitle:@"温馨提示" detailTitle:@"有新版本更新，请升级" confirm:^{
-
-        }];
-    }];
 }
 
 - (void)didReceiveMemoryWarning {

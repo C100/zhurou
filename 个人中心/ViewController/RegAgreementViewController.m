@@ -44,8 +44,11 @@
     self.webView.UIDelegate = self;
     self.webView.navigationDelegate = self;
     [self.view addSubview:self.webView];
+        
+    NSString *URLString = [self.url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:URLString]];
     [self.webView loadRequest:request];
 }
 

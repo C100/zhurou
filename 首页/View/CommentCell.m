@@ -355,13 +355,13 @@
 
 -(void)imgBigAction:(UITapGestureRecognizer *)tap
 {
-    UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    
     NSInteger index =  tap.view.tag - 10;
     if (index>=_model.imgArr.count) {
         return;
     }
     
-    [nav.view endEditing:YES];
+    [_vc.view endEditing:YES];
     PhotoBrowerViewController *vc = [[PhotoBrowerViewController alloc]init];
     vc.index = index;
     vc.imagesArray = _model.imgArr;
@@ -376,7 +376,7 @@
     }];
     
     vc.hidesBottomBarWhenPushed = YES;
-    [nav pushViewController:vc animated:YES];
+    [_vc.navigationController pushViewController:vc animated:YES];
 }
 
 

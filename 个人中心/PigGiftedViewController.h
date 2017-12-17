@@ -7,7 +7,10 @@
 //
 
 #import "BaseViewController.h"
+#import "MyPigListModel.h"
 
 @interface PigGiftedViewController : BaseViewController
+
+@property (nonatomic, strong) MyPigListModel *pigListModel;
 
 @end

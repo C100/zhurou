@@ -143,7 +143,10 @@
         vc.chuanyiId = model.ID;
 //        vc.resourceUrl = @"https://www.baidu.com";
         [self.navigationController pushViewController:vc animated:YES];
+
     }
+        
+    
   }
 
 //返回分区头的高度

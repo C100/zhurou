@@ -212,7 +212,7 @@
                 NSString *appStoreURLString = DICT_ATTRIBUTE_FOR_KEY(dict, @"iosUpgradeAddress");
                 if (appStoreURLString.length > 0) {
                     if (callback) {
-                        callback (YES, message, obj, code);
+                        callback (YES, message, appStoreURLString, code);
                     }
                 } else {
                     if (callback) {

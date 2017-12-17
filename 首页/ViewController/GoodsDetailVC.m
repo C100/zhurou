@@ -17,13 +17,13 @@
 #import "GoodsDetailView.h"
 #import "ShoppingGoodsModel.h"
 #import "MQChatViewManager.h"
-
 @interface GoodsDetailVC ()<UITableViewDelegate,UITableViewDataSource,GoodsDetailCellDelegate>
 {
 //    GoodsDetailModel *_dataModel;
     ShoppingCarUnderView *_underView;
     GoodsDetailView *_goodsView;
     ShoppingCartModel *_shoopingModel;
+
 }
 
 @end
@@ -42,9 +42,13 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 
+
+
 #pragma mark intviewcontroller
+
 -(CGSize)baseUrl:(NSString *)url{
     NSMutableString *tempStr =[[NSMutableString alloc]init];
             if ( [url hasPrefix:@"http"]) {
@@ -62,12 +66,16 @@
 -(void)reloadDataModel:(NSNotification *)text
 {
     _dataModel =  text.object;
+    
     _dataModel.firstSize = [self baseUrl:_dataModel.titleImg];
     for (int i = 0; i<_dataModel.goodsArr.count; i++) {
         CommonModel *commomModel = _dataModel.goodsArr[i];
         commomModel.secSize = [self baseUrl:commomModel.imgUrl];
     }
     _dataModel.thirdSize = [self baseUrl:_dataModel.chicunImg];
+    
+    
+    
     _shoopingModel.modelArr = _dataModel.shoppingCareGoodsArr;
     _shoopingModel.titleText = _dataModel.title;
     _shoopingModel.type = _dataModel.detailTitle;
@@ -128,6 +136,9 @@
 //        _underView.scaleLabel.attributedText = str;
 //        
 //    }
+    
+    
+    
     [_underView.btn1 addTarget:self action:@selector(kefuAction) forControlEvents:UIControlEventTouchUpInside];
     [self.tableView reloadData];
 }
@@ -139,18 +150,19 @@
 
 -(void)configUI
 {
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0,KHScreenW, KHScreenH-64-40-49) style:UITableViewStyleGrouped];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor = The_list_light_backgroundColor;
     [self.view addSubview:self.tableView];
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    }];
+    
     //注册
     [self.tableView registerClass:[GoodsDetailCell class] forCellReuseIdentifier:@"GoodsDetailCell"];
+
+    
     self.tableView.estimatedRowHeight = 100;
+    
 //    _underView = [[ShoppingCarUnderView alloc]init];
 //    [self.view addSubview:_underView];
 //    [self.view bringSubviewToFront:_underView];
@@ -214,6 +226,7 @@
 //    _goodsView.shoppingCareEdit = YES;
     _goodsView.isAddShoppingCare = YES;
     [_goodsView showGoodsView:_goodsView];
+    _goodsView.vc = self;
 
 //    [_goodsView.requestBtn addTarget:self action:@selector(requestAction) forControlEvents:UIControlEventTouchUpInside];
     
@@ -230,6 +243,9 @@
     //    _goodsView.shoppingCareEdit = YES;
     _goodsView.isAddShoppingCare = NO;
     [_goodsView showGoodsView:_goodsView];
+    _goodsView.vc = self;
+
+    
 }
 
 
@@ -242,7 +258,7 @@
 //更多评论
 -(void)moreCommentAction
 {
-    self.moreCommentcallback();
+    _moreCommentcallback();
 }
 
 #pragma mark --tableViewDelegate
@@ -290,6 +306,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+   
+    
     if (indexPath.section == 5) {
         static NSString *cellid = @"Comment333Cell";
         CommentModel *model = _dataModel.commentArr[indexPath.row];
@@ -298,25 +316,28 @@
 //            cell.backgroundColor = [UIColor redColor];
             cell = [[CommentCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid];
         }
+        cell.vc = self;
         cell.model = model;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         return cell;
 //        return cell;
+
     }else
     {
 //        GoodsDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"GoodsDetailCell" forIndexPath:indexPath];
 //        cell.vc = self;
 //        cell.indexPath = indexPath;
 //        cell.model = _dataModel;
-        
-        GoodsDetailCell *cell = [[GoodsDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GoodsDetailCell" model:_dataModel index:indexPath];
+        GoodsDetailCell *cell = [[GoodsDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GoodsDetailCell" model:_dataModel index:indexPath uiviewcontroller:self];
         cell.goodsDetailCellDelegate = self;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.collectBtn addTarget:self action:@selector(collectionAction:) forControlEvents:UIControlEventTouchUpInside];
+    
         return cell;
     }
 }
+
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
@@ -384,11 +405,8 @@
 //返回分区头的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    
     if (section == 5) {
         return 50;
-    }else if(section == 0){
-        return 0.1;
     }
     return 10;
 }

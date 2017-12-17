@@ -30,6 +30,7 @@
 
 
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier InspectModel:(OrderModel *)model IndexPath:(NSIndexPath *)indexPath;
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier InspectModel:(OrderModel *)model IndexPath:(NSIndexPath *)indexPath
+                          VC:(UIViewController *)vc;
 
 @end

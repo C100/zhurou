@@ -71,23 +71,28 @@
 //        _tableViewContents = @[@[@"我的收藏",@"我的优惠券",@"我的资金",@"我的信用额度",@"我的地址"],@[@"我的猪种",@"托管养殖师"],@[@"我的邀请码",@"在线客服",@"关于我们"]];
 //    }
     
-    
+    _tableViewContents = @[@[@"我的收藏",@"我的优惠券",@"我的地址"],@[@"我的邀请码",@"在线客服",@"关于我们"]];
+
     [self lcy_requestIsHiddenData];
     
 }
 
 - (void)lcy_requestIsHiddenData{
+    __block __weak PersonalCenterVC *weakself = self;
+
     [HttpRequestManager postAdImgViewRequest:nil viewcontroller:self finishBlock:^(NSDictionary *data) {
         
         NSInteger isAppInReview = (NSInteger)[data objectForKey:@"isAppInReview"];
         
-        
-        if (isAppInReview==1) {//审核中
-            _tableViewContents = @[@[@"我的收藏",@"我的优惠券",@"我的地址"],@[@"我的邀请码",@"在线客服",@"关于我们"]];
-        }else{
-            _tableViewContents = @[@[@"我的收藏",@"我的优惠券",@"我的资金",@"我的信用额度",@"我的地址"],@[@"我的猪种",@"托管养殖师"],@[@"我的邀请码",@"在线客服",@"关于我们"]];
-        }
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (isAppInReview==1) {//审核中
+                _tableViewContents = @[@[@"我的收藏",@"我的优惠券",@"我的地址"],@[@"我的邀请码",@"在线客服",@"关于我们"]];
+            }else{
+                _tableViewContents = @[@[@"我的收藏",@"我的优惠券",@"我的资金",@"我的信用额度",@"我的地址"],@[@"我的猪种",@"托管养殖师"],@[@"我的邀请码",@"在线客服",@"关于我们"]];
+            }
+            [_tableview reloadData];
+            [weakself prepareData];
+        });
         
     }];
 }
@@ -96,12 +101,14 @@
 {
     [super viewWillAppear:animated];
     [self prepareData];
-
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
+    [self.navigationController.navigationBar.subviews firstObject].hidden = NO;
+    self.automaticallyAdjustsScrollViewInsets = YES;
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 #pragma mark intviewcontroller
@@ -329,6 +336,7 @@
     _tableview.dataSource = self;
     _tableview.delegate = self;
     _tableview.bounces=false;
+    _tableview.tableFooterView = [UIView new];
     [self.view addSubview:_tableview];
     [_tableview mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view);

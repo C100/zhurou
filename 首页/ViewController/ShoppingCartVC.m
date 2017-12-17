@@ -17,12 +17,12 @@
 #import "GoodsVC.h"
 @interface ShoppingCartVC ()<UITableViewDelegate,UITableViewDataSource>
 {
-    
+    NSMutableArray *_tableViewDataArray;
     ShoppingCarUnderView *_underView;
     BOOL _isAllSelect;
     GoodsDetailView *_goodsView;
 }
-@property NSMutableArray *tableViewDataArray;
+
 @end
 
 @implementation ShoppingCartVC
@@ -37,17 +37,17 @@
     NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
     //添加当前类对象为一个观察者，name和object设置为nil，表示接收一切通知
     [center addObserver:self selector:@selector(prepareData) name:@"shoppingCarChange" object:nil];
+    
 
+    
      [self configUI];
 }
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self prepareData];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 #pragma mark intviewcontroller
 -(void)prepareData
 {
@@ -325,11 +325,11 @@
     NSDictionary *dic = @{@"cardId":model.carId,
                           };
 
-    NSInteger index=btn.tag/10;
-    __weak __typeof(self)weakSelf = self;
+    
+    
     [[MyAlert manage] showBtnAlertWithTitle:@"提醒" detailTitle:@"是否删除该商品" confirm:^{
         
-        [HttpRequestManager postShoppingCarDeletRequest:dic viewcontroller:weakSelf finishBlock:^(NSDictionary *dic) {
+        [HttpRequestManager postShoppingCarDeletRequest:dic viewcontroller:self finishBlock:^(NSDictionary *dic) {
             
             if ([dic[@"code"] intValue] == 200) {
                 [[MyAlert manage] showNoBtnAlertWithTitle:@"提醒" detailTitle:@"删除成功"];
@@ -337,7 +337,7 @@
                 NSNotification * notice = [NSNotification notificationWithName:@"shoppingCarChange" object:nil userInfo:nil];
                 //发送消息
                 [[NSNotificationCenter defaultCenter]postNotification:notice];
-                [weakSelf.tableViewDataArray removeObjectAtIndex:index];
+                [_tableViewDataArray removeObjectAtIndex:btn.tag/10];
 //                [self.tableView reloadData];
             }
             

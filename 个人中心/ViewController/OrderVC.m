@@ -41,27 +41,25 @@
     if (!_viewControllerArray) {
         
         _viewControllerArray = [[NSMutableArray alloc]init];
-        __weak __typeof(self)weakSelf = self;
         AllOrdetVC *FController = [[AllOrdetVC alloc]init];
         [FController setCallback:^{//全部
-            [weakSelf updateData];
+            [self updateData];
         }];
         WaitPayVC *SController = [[WaitPayVC alloc]init];
         [SController setCallback:^{//待付款
-            [weakSelf updateData];
+            [self updateData];
         }];
         AlreadyPayVC *TController = [[AlreadyPayVC alloc]init];
         [TController setCallback:^{//待发货
-            [weakSelf updateData];
+            [self updateData];
         }];
         WaitEvaluateVC *TController2 = [[WaitEvaluateVC alloc]init];
         [TController2 setCallback:^{//待收货
-            [weakSelf updateData];
+            [self updateData];
         }];
         FinishOrderVC *TController3 = [[FinishOrderVC alloc]init];
-        
         [TController3 setCallback:^{//待评价
-            [weakSelf updateData];
+            [self updateData];
         }];
 
         [_viewControllerArray addObjectsFromArray:@[FController,SController,TController,TController2,TController3]];

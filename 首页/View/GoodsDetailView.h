@@ -19,6 +19,9 @@
 @property(nonatomic,strong) GoodsModel *selectModel;
 
 
+
+@property(nonatomic,strong) UIViewController *vc;
+
 @property(nonatomic,strong) UIButton *requestBtn;
 
 

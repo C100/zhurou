@@ -25,6 +25,8 @@
 @property(nonatomic,strong) UIView *replyBackView;
 @property(nonatomic,strong) CommentModel *model;
 
+@property(nonatomic,strong) UIViewController *vc;
+
 
 //@property(nonatomic,strong) UILabel *titleLab;
 

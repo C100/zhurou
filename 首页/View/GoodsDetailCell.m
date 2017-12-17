@@ -15,6 +15,7 @@
 @interface GoodsDetailCell()
 {
     GoodsDetailModel *_model;
+    UIViewController *_vc ;
     CGSize _firstSize;
     CGSize _secondSize;
     CGSize _thirdSize;
@@ -27,10 +28,11 @@
 
 @implementation GoodsDetailCell
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier model:(GoodsDetailModel *)model index:(NSIndexPath *)index
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier model:(GoodsDetailModel *)model index:(NSIndexPath *)index uiviewcontroller:(UIViewController *)vc
 {
     
     _model = model;
+    _vc = vc;
     
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -39,8 +41,10 @@
             [self configTitleView];
         }else if (index.section == 1)
         {
+            
             CommonModel *commomModel = _model.goodsArr[index.row];
             [self configGoodsView:commomModel];
+            
         }else if (index.section == 2)
         {
             [self configSizeView];
@@ -67,6 +71,8 @@
     [Tool setImgurl:titleImg imgurl:_model.titleImg];
     [self.contentView addSubview:titleImg];
     
+    
+        
     CGSize imageSize = _model.firstSize;
     if (imageSize.width!=0&&imageSize.height!=0) {
         [titleImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -87,6 +93,7 @@
             }
         }];
     }
+    
         //    titleImg.image
     NSString *title = _model.title;
     if ([_model.detailTitle isEqualToString:@" "]||_model.detailTitle==nil||[_model.detailTitle isEqualToString:@""]) {
@@ -563,8 +570,7 @@
    
     GoodsVC *vc = [[GoodsVC alloc]init];
     vc.goodIds = commomMond.ID;
-    UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    [nav pushViewController:vc animated:YES];
+    [_vc.navigationController pushViewController:vc animated:YES];
 
     
 }

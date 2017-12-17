@@ -26,9 +26,10 @@
 @property(nonatomic, strong) UILabel *titleLab;
 @property(nonatomic, strong) UILabel *detailLab;
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier model:(GoodsDetailModel *)model index:(NSIndexPath *)index;
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier model:(GoodsDetailModel *)model index:(NSIndexPath *)index uiviewcontroller:(UIViewController *)vc;
 
 @property (nonatomic,strong) GoodsDetailModel *model;
+@property (nonatomic,strong) UIViewController *vc;
 @property (nonatomic,strong) NSIndexPath *indexPath;
 
 @property(nonatomic, weak) id<GoodsDetailCellDelegate> goodsDetailCellDelegate;

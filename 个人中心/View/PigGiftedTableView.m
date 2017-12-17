@@ -25,8 +25,18 @@
     return self;
 }
 
+- (void)setPigListModel:(MyPigListModel *)pigListModel{
+    _pigListModel = pigListModel;
+    [self reloadData];
+}
+
+- (void)setGoodsDetailModel:(GoodsDetailModel *)goodsDetailModel{
+    _goodsDetailModel = goodsDetailModel;
+    [self reloadData];
+}
+
 -(NSInteger)numberOfRowsInSection:(NSInteger)section{
-    return 2;
+    return 1;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -36,11 +46,25 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     BackProductHeadCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BackProductHeadCell" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (self.pigListModel) {
+        [cell.iconImageView sd_setImageWithURL:[NSURL URLWithString:self.pigListModel.goodsImg] placeholderImage:[UIImage imageNamed:@"wutu@2x.png"]];
+        cell.productLabel.text = self.pigListModel.goodsName;
+    }
+    if (self.goodsDetailModel) {
+        cell.attributeLabel.text = self.goodsDetailModel.detailTitle;
+        cell.moneyLabel.text = self.goodsDetailModel.price;
+        cell.numLabel.text = @"x1";
+    }
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return UITableViewAutomaticDimension;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    _SelectCallBack(nil);
 }
 
 @end

@@ -21,15 +21,15 @@
 @interface OrderDetailVC ()<UITableViewDelegate,UITableViewDataSource>
 {
     ShoppingCarUnderView *_underView;
-    
+    CGFloat _orderPrice;
+    NSString *_fapiaoJson;
+    NSString *_payWay;
     BOOL _isClickTableView;
     NSNumber *_xinyongeduPrice;
     CGFloat _priceActual;
     NSNumber *_yuePrice;
 }
-@property CGFloat orderPrice;
-@property NSString *fapiaoJson;
-@property NSString *payWay;
+
 @end
 
 @implementation OrderDetailVC
@@ -98,6 +98,7 @@
         allPrice = [goodsModel.scalePrice floatValue] * [goodsModel.number floatValue] + allPrice;
     }
     
+    
     NSString *allPriceStr = [NSString stringWithFormat:@"%.0f",allPrice*100];
     [HttpRequestManager getReceiptInfoWithReceiptId:nil andInitiaMoney:@(allPriceStr.intValue) andFinishBlock:^(NSDictionary *dataDic) {
         if (dataDic) {
@@ -114,11 +115,13 @@
             }
             
             
-            self.orderPrice = allPrice;
+            _orderPrice = allPrice;
             [_underView configview3withpriceTitle:@"实付款：" priceTitle:[[NSString alloc]initWithFormat:@"%0.2f",favorableMoney.floatValue/100 ] btnTitle:@"确认"];
             //[_underView configview2withpriceTitle:@"实付款：" priceTitle:[[NSString alloc]initWithFormat:@"%0.2f",allPrice ] btnTitle:@"确定"];
             _priceActual = favorableMoney.floatValue/100;
             [_underView.btn1 addTarget:self action:@selector(confirmAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            
             
             [self.tableView reloadData];
             
@@ -221,7 +224,6 @@
 //        return ;
 //    }];
     NSNumber *isOnNum = [[NSUserDefaults standardUserDefaults] objectForKey:@"isAppInReviewNum"];
-    __weak __typeof(self)weakSelf = self;
     if (isOnNum.intValue==1||sender==nil) {//审核中
         [[MyAlert manage] payWaysAlert:^(NSString *str) {
             
@@ -231,8 +233,8 @@
             [[NSNotificationCenter defaultCenter]postNotification:notice];
             
             NSMutableArray *goodsArr = [[NSMutableArray alloc]init];
-            for (int i = 0 ; i < weakSelf.model.goodsArr.count; i++) {
-                GoodsModel *goodModel = weakSelf.model.goodsArr[i];
+            for (int i = 0 ; i < _model.goodsArr.count; i++) {
+                GoodsModel *goodModel = _model.goodsArr[i];
                 NSDictionary *goodDic =@{@"goodsAmount":goodModel.number,
                                          @"goodsColor":goodModel.color,
                                          @"goodsId":goodModel.goodsId,
@@ -247,52 +249,52 @@
             
             NSDictionary *praramDic = @{@"payMsg":goodsArr,
                                         };
-            NSString *jsonStr =  [weakSelf dictionaryToJson:praramDic];
+            NSString *jsonStr =  [ self dictionaryToJson:praramDic];
             
-            if (weakSelf.model.code==nil) {
-                weakSelf.model.code = @"";
+            if (_model.code==nil) {
+                _model.code = @"";
             }
             
             if (jsonStr==nil) {
                 jsonStr = @"";
             }
-            if (weakSelf.fapiaoJson == nil) {
-                weakSelf.fapiaoJson = @"";
+            if (_fapiaoJson == nil) {
+                _fapiaoJson = @"";
             }
             
             //支付方式
             NSDictionary *dic = @{@"payMethod":str,
-                                  @"receiptAddressId":weakSelf.model.AddressModel.ID,
-                                  @"voucherId":weakSelf.model.couponsId,
+                                  @"receiptAddressId":_model.AddressModel.ID,
+                                  @"voucherId":_model.couponsId,
                                   @"payMsg":jsonStr,
-                                  @"memo":weakSelf.model.remark,
-                                  @"fapiao":weakSelf.fapiaoJson,
-                                  @"cartIds":weakSelf.model.carIds,
-                                  @"promotionCode":weakSelf.model.code,
-                                  @"moneyOffJson":weakSelf.model.discountJson
+                                  @"memo":_model.remark,
+                                  @"fapiao":_fapiaoJson,
+                                  @"cartIds":_model.carIds,
+                                  @"promotionCode":_model.code,
+                                  @"moneyOffJson":_model.discountJson
                                   };
             
-            [HttpRequestManager postPayRequest:dic viewcontroller:weakSelf finishBlock:^(NSDictionary *data) {
+            
+            [HttpRequestManager postPayRequest:dic viewcontroller:self finishBlock:^(NSDictionary *data) {
                 if ([str isEqualToString:@"KQ_PAY"]) {
                     PayWebViewController *vc = [[PayWebViewController alloc]init];
                     vc.isFirst = @"first";
                     vc.html = data[@"pk"];
-                    [weakSelf.navigationController pushViewController:vc animated:YES];
+                    [self.navigationController pushViewController:vc animated:YES];
                 }
             }];
-        }
-         ];
+        }];
     }else{
-        if (weakSelf.payWay==nil) {
+        if (_payWay==nil) {
             [[MyAlert manage]showNoBtnAlertWithTitle:@"提醒" detailTitle:@"请选择支付方式"];
             return;
         }else{
             
-            [[MyAlert manage]showBtnAlertWithTitle:@"提醒" detailTitle:[NSString stringWithFormat:@"使用%@",weakSelf.payWay] confirm:^{
+            [[MyAlert manage]showBtnAlertWithTitle:@"提醒" detailTitle:[NSString stringWithFormat:@"使用%@",_payWay] confirm:^{
                 
                 
                 NSString *payMethod;
-                if ([weakSelf.payWay isEqualToString:@"信用额度支付"]) {
+                if ([_payWay isEqualToString:@"信用额度支付"]) {
                     payMethod = @"XY_PAY";
                 }else{
                     payMethod = @"YE_PAY";
@@ -305,8 +307,8 @@
                 [[NSNotificationCenter defaultCenter]postNotification:notice];
                 
                 NSMutableArray *goodsArr = [[NSMutableArray alloc]init];
-                for (int i = 0 ; i < weakSelf.model.goodsArr.count; i++) {
-                    GoodsModel *goodModel = weakSelf.model.goodsArr[i];
+                for (int i = 0 ; i < _model.goodsArr.count; i++) {
+                    GoodsModel *goodModel = _model.goodsArr[i];
                     NSDictionary *goodDic =@{@"goodsAmount":goodModel.number,
                                              @"goodsColor":goodModel.color,
                                              @"goodsId":goodModel.goodsId,
@@ -323,40 +325,41 @@
                                             };
                 NSString *jsonStr =  [ self dictionaryToJson:praramDic];
                 
-                if (weakSelf.model.code==nil) {
-                    weakSelf.model.code = @"";
+                if (_model.code==nil) {
+                    _model.code = @"";
                 }
                 
                 if (jsonStr==nil) {
                     jsonStr = @"";
                 }
-                if (weakSelf.fapiaoJson == nil) {
-                    weakSelf.fapiaoJson = @"";
+                if (_fapiaoJson == nil) {
+                    _fapiaoJson = @"";
                 }
                 
                 //支付方式
                 NSDictionary *dic = @{@"payMethod":payMethod,
-                                      @"receiptAddressId":weakSelf.model.AddressModel.ID,
-                                      @"voucherId":weakSelf.model.couponsId,
+                                      @"receiptAddressId":_model.AddressModel.ID,
+                                      @"voucherId":_model.couponsId,
                                       @"payMsg":jsonStr,
-                                      @"memo":weakSelf.model.remark,
-                                      @"fapiao":weakSelf.fapiaoJson,
-                                      @"cartIds":weakSelf.model.carIds,
-                                      @"promotionCode":weakSelf.model.code,
-                                      @"moneyOffJson":weakSelf.model.discountJson
+                                      @"memo":_model.remark,
+                                      @"fapiao":_fapiaoJson,
+                                      @"cartIds":_model.carIds,
+                                      @"promotionCode":_model.code,
+                                      @"moneyOffJson":_model.discountJson
                                       };
                 
-                __weak __typeof(self)weakSelf = self;
-                [HttpRequestManager postPayRequest:dic viewcontroller:weakSelf finishBlock:^(NSDictionary *data) {
+                
+                [HttpRequestManager postPayRequest:dic viewcontroller:self finishBlock:^(NSDictionary *data) {
                     NSNumber *code = data[@"code"];
                     if (code.intValue == 200) {
                         [[MyAlert manage] showNoBtnAlertWithTitle:@"提醒" detailTitle:@"支付成功"];
-                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                        [self.navigationController popViewControllerAnimated:YES];
                         //                    }];
                     }else{
                         NSString *message = data[@"msg"];
                         [[MyAlert manage] showNoBtnAlertWithTitle:@"提醒" detailTitle:message];
                     }
+
                 }];
                 
             }];
@@ -487,11 +490,10 @@
     TextViewVC *vc = [[TextViewVC alloc]init];
     vc.VCTitle = @"备注";
     vc.contantTitle = _model.remark;
-    __weak __typeof(self)weakSelf = self;
     [vc setCallback:^(NSString *str) {
         NSLog(@"%@",str);
         _model.remark = str;
-        [weakSelf.tableView reloadData];
+        [self.tableView reloadData];
     }];
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -526,7 +528,7 @@
 {
     if (indexPath.section==0||indexPath.section==1||indexPath.section==2) {
         static NSString *cellid = @"OrderDetailCell";
-        OrderDetailCell *cell  = [[OrderDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid InspectModel:_model IndexPath:indexPath];
+        OrderDetailCell *cell  = [[OrderDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid InspectModel:_model IndexPath:indexPath VC:self];
         [cell.couponsBtn addTarget:self action:@selector(youhuiquanAction) forControlEvents:UIControlEventTouchUpInside];
         [cell.billInfoBtn addTarget:self action:@selector(fapiaoInfoAction) forControlEvents:UIControlEventTouchUpInside];
         [cell.remarkBtn addTarget:self action:@selector(remarkAction) forControlEvents:UIControlEventTouchUpInside];
@@ -576,10 +578,9 @@
         vc.isOrder = YES;
         vc.selectedAddressModel = _model.AddressModel;
         vc.orderAdressId = _model.AddressModel.ID;
-        __weak __typeof(self)weakSelf = self;
         [vc setCallback:^(AddressModel *model) {
             _model.AddressModel = model;//在地址管理中点击某个地址 / 删除的地址与该页地址不一致
-            [weakSelf.tableView reloadData];
+            [self.tableView reloadData];
         }];
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -620,6 +621,7 @@
             UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:3]];
             UIImageView *iv = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"勾选"]];
             cell.accessoryView = iv;
+            
             
             _payWay = @"信用额度支付";
         }else{

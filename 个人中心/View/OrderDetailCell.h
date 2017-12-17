@@ -23,7 +23,8 @@
 @property(nonatomic, strong) UIButton *backInfoButton;
 
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier InspectModel:(OrderDetailModel *)model IndexPath:(NSIndexPath *)indexPath;
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier InspectModel:(OrderDetailModel *)model IndexPath:(NSIndexPath *)indexPath
+                          VC:(UIViewController *)vc;
 
 
 

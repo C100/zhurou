@@ -163,9 +163,8 @@
     GoodsCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellid];
     cell = [[GoodsCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid InspectModel:model IndexPath:indexPath VC:self ];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    __weak __typeof(self)weakSelf = self;
     [cell setCallback:^{
-        [weakSelf.tableView reloadData];
+        [self.tableView reloadData];
     }];
     return cell;
     

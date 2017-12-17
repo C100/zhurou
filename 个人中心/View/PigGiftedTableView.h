@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MyPigListModel.h"
 
 @interface PigGiftedTableView : UITableView<UITableViewDelegate,UITableViewDataSource>
+
+@property (nonatomic, strong) void(^SelectCallBack)(id obj);
+
+@property (nonatomic, strong) MyPigListModel *pigListModel;
+
+@property (nonatomic, strong) GoodsDetailModel *goodsDetailModel;
 
 @end

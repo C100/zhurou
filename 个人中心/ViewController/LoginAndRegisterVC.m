@@ -223,26 +223,27 @@
 -(void)loginAction
 {
     
-//    [self.view endEditing:YES];
-//
-//
-//    UITextField *phoneTextField = [self.loginView viewWithTag:100];
-//    UITextField *pwdTextField = [self.loginView viewWithTag:101];
-//    if (![phoneTextField.text isValidateMobile]) {
-//        [[MyAlert manage] showNoBtnAlertWithTitle:@"提醒" detailTitle:@"用户名或密码有误"];
-//        return;
-//    }
-//
-//    if (pwdTextField.text.length < 6  || pwdTextField.text.length > 12) {
-//        [[MyAlert manage] showNoBtnAlertWithTitle:@"提醒" detailTitle:@"用户名或密码有误"];
-//        return;
-//    }
+    [self.view endEditing:YES];
     
     
-    NSDictionary *dic = @{@"mobile":@"18005818260",
-                          @"password":@"aa111111",
+    UITextField *phoneTextField = [self.loginView viewWithTag:100];
+    UITextField *pwdTextField = [self.loginView viewWithTag:101];
+    if (![phoneTextField.text isValidateMobile]) {
+        [[MyAlert manage] showNoBtnAlertWithTitle:@"提醒" detailTitle:@"用户名或密码有误"];
+        return;
+    }
+    
+    if (pwdTextField.text.length < 6  || pwdTextField.text.length > 12) {
+        [[MyAlert manage] showNoBtnAlertWithTitle:@"提醒" detailTitle:@"用户名或密码有误"];
+        return;
+    }
+    
+    
+    NSDictionary *dic = @{@"mobile":phoneTextField.text,
+                          @"password":pwdTextField.text,
                           };
-    [HttpRequestManager postLoginRequest:dic viewcontroller:nil finishBlock:^(NSDictionary *tempdic) {
+    
+    [HttpRequestManager postLoginRequest:dic viewcontroller:self finishBlock:^(NSDictionary *tempdic) {
         
     }];
 }
@@ -276,7 +277,7 @@
     [ShareSDK getUserInfo:userInfo
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
      {
-
+         
          if (state == SSDKResponseStateSuccess){
              //             /front/regByUid.do?uid=&headUrl=&nickname=?
              if (!user.icon) {
@@ -285,7 +286,7 @@
              if (!user.nickname) {
                  user.nickname = @"";
              }
-
+             
              //             NSLog(@"%@",user);
              NSString *headUrl = @"";
              if (userInfo == SSDKPlatformTypeQQ) {
@@ -299,39 +300,39 @@
                      headUrl = user.icon;
                  }
              }
-
-
+             
+             
              NSDictionary *dic = @{@"uid":user.uid,
                                    @"headUrl":headUrl,
                                    @"nickname":user.nickname,
                                    };
-
+             
              [HttpRequestManager postThirdLoginRequest:dic viewcontroller:self finishBlock:^(NSDictionary *data) {
-
+                 
                  if ([data[@"code"] intValue] == 200) {
                      [[UserManager manage] thirdLoginSave:user.uid];
-
+                     
 //                     NSDictionary *infoDic = data[@"phone"];
                      if (!data[@"phone"]) {
                          //跳转到手机绑定
                          [self.navigationController pushViewController:[BindingPhoneVC new] animated:YES];
                      }
-
+                     
                  }
-
+                 
              }];
-
+             
              NSLog(@"uid=%@",user.uid);
              NSLog(@"%@",user.credential);
              NSLog(@"token=%@",user.credential.token);
              NSLog(@"nickname=%@",user.nickname);
          }
-
+         
          else
          {
              NSLog(@"%@",error);
          }
-
+         
      }];
     
 }

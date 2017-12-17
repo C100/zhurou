@@ -36,7 +36,7 @@
     [self.view addSubview:self.listView];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(buyAction:) name:@"购买凭证" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(giftedAction) name:@"猪种礼包" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(giftedAction:) name:@"猪种礼包" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(preButtonAction:) name:@"提前交割" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(payAction) name:@"付款" object:nil];
 
@@ -80,8 +80,11 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
--(void)giftedAction{
+-(void)giftedAction:(NSNotification *)noti{
+    
+    MyPigListModel *model = noti.object;
     PigGiftedViewController *vc = [[PigGiftedViewController alloc]init];
+    vc.pigListModel = model;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -90,7 +93,7 @@
     MyPigListModel *model = (MyPigListModel *)arr.firstObject;
     //购买凭证
     LCYPreBuyProtocalViewController *vc = [[LCYPreBuyProtocalViewController alloc] init];
-    vc.URLString = model.contractUrl;
+    vc.URLString = model.normalContractUrl;
     vc.model = model;
     [self.navigationController pushViewController:vc animated:YES];
 }

@@ -627,8 +627,11 @@
                                                                         <constraint firstAttribute="width" secondItem="gsa-M9-oLw" secondAttribute="height" multiplier="1:1" id="eNd-1t-Ncr"/>
                                                                     </constraints>
                                                                 </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iD5-mz-f4A">
-                                                                    <rect key="frame" x="80" y="14" width="39.5" height="19.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iD5-mz-f4A">
+                                                                    <rect key="frame" x="80" y="14" width="200" height="19.5"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="200" id="F3x-tb-L3t"/>
+                                                                    </constraints>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                     <color key="textColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
@@ -656,12 +659,12 @@
                                                             <constraints>
                                                                 <constraint firstItem="Sue-s1-KrH" firstAttribute="top" secondItem="iD5-mz-f4A" secondAttribute="top" id="9cr-jF-c1O"/>
                                                                 <constraint firstItem="LKi-ZM-dtZ" firstAttribute="trailing" secondItem="Sue-s1-KrH" secondAttribute="trailing" id="GsV-Kv-opr"/>
+                                                                <constraint firstItem="LKi-ZM-dtZ" firstAttribute="top" secondItem="Sue-s1-KrH" secondAttribute="baseline" constant="12" id="KcE-51-O0l"/>
                                                                 <constraint firstItem="fGs-Ow-0Td" firstAttribute="leading" secondItem="iD5-mz-f4A" secondAttribute="leading" id="OFC-2C-cA6"/>
                                                                 <constraint firstItem="iD5-mz-f4A" firstAttribute="top" secondItem="Wsv-8r-EYk" secondAttribute="top" constant="14" id="URG-q6-kEQ"/>
                                                                 <constraint firstItem="fGs-Ow-0Td" firstAttribute="top" secondItem="iD5-mz-f4A" secondAttribute="baseline" constant="12" id="XZp-BP-kUe"/>
                                                                 <constraint firstItem="iD5-mz-f4A" firstAttribute="leading" secondItem="gsa-M9-oLw" secondAttribute="trailing" constant="20" id="Zyb-bm-ZCJ"/>
                                                                 <constraint firstAttribute="trailing" secondItem="Sue-s1-KrH" secondAttribute="trailing" constant="10" id="aSi-Ee-lIq"/>
-                                                                <constraint firstItem="LKi-ZM-dtZ" firstAttribute="top" secondItem="fGs-Ow-0Td" secondAttribute="top" id="eTT-jH-5SB"/>
                                                                 <constraint firstItem="gsa-M9-oLw" firstAttribute="centerY" secondItem="Wsv-8r-EYk" secondAttribute="centerY" id="ohV-N5-V9h"/>
                                                                 <constraint firstItem="gsa-M9-oLw" firstAttribute="leading" secondItem="Wsv-8r-EYk" secondAttribute="leading" constant="10" id="zqV-C7-zdR"/>
                                                             </constraints>
@@ -691,12 +694,14 @@
                                             <outlet property="imageViewIcon" destination="gsa-M9-oLw" id="agJ-QW-deN"/>
                                             <outlet property="imageViewWidthConstraint" destination="0wC-f2-PxC" id="BwZ-t9-SV7"/>
                                             <outlet property="labelCount" destination="LKi-ZM-dtZ" id="BLD-zi-uC6"/>
+                                            <outlet property="labelCountTopConstraint" destination="KcE-51-O0l" id="ZmE-TX-hhE"/>
                                             <outlet property="labelPrice" destination="Sue-s1-KrH" id="24O-Me-8Kc"/>
                                             <outlet property="labelSubTitle" destination="fGs-Ow-0Td" id="uys-5f-nVu"/>
                                             <outlet property="labelSubTitleTopConstraint" destination="XZp-BP-kUe" id="1wd-GF-JWJ"/>
                                             <outlet property="labelTitle" destination="iD5-mz-f4A" id="Mii-mi-IZT"/>
                                             <outlet property="labelTitleLeftConstraint" destination="Zyb-bm-ZCJ" id="qPn-BU-SaW"/>
                                             <outlet property="labelTitleTopConstraint" destination="URG-q6-kEQ" id="l16-FU-rrQ"/>
+                                            <outlet property="labelTitleWidthConstraint" destination="F3x-tb-L3t" id="R6h-va-B7o"/>
                                             <outlet property="labelTop" destination="3I9-Lu-fvL" id="1V3-4d-jlr"/>
                                             <outlet property="viewTopHeightConstraint" destination="kfN-Df-3ME" id="JIh-Yh-XSK"/>
                                         </connections>
@@ -986,8 +991,11 @@
                                                                         <constraint firstAttribute="width" constant="50" id="jUf-Mf-HG3"/>
                                                                     </constraints>
                                                                 </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="商品" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ty8-EY-2lU">
-                                                                    <rect key="frame" x="80" y="14" width="33" height="19.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="商品" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ty8-EY-2lU">
+                                                                    <rect key="frame" x="80" y="14" width="100" height="19.5"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="100" id="BM2-dk-Q65"/>
+                                                                    </constraints>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                     <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
@@ -998,8 +1006,8 @@
                                                                     <color key="textColor" red="0.53333333329999999" green="0.53333333329999999" blue="0.53333333329999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="价格" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hky-fi-YQf">
-                                                                    <rect key="frame" x="332" y="14" width="33" height="19.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="原价：￥ 5900 现价：0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hky-fi-YQf">
+                                                                    <rect key="frame" x="193.5" y="14" width="171.5" height="19.5"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                     <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
@@ -1056,6 +1064,7 @@
                                             <outlet property="labelTitle" destination="ty8-EY-2lU" id="unp-vB-Hw7"/>
                                             <outlet property="labelTitleLeftConstraint" destination="1wQ-Hi-rX6" id="cqG-xR-6Ff"/>
                                             <outlet property="labelTitleTopConstraint" destination="vmz-8A-0ib" id="c6B-A0-lBP"/>
+                                            <outlet property="labelTitleWidthConstraint" destination="BM2-dk-Q65" id="Q7F-mu-opd"/>
                                             <outlet property="labelTop" destination="WdB-3Q-NoH" id="g5X-GN-gsP"/>
                                             <outlet property="viewTopHeightConstraint" destination="F40-To-QiU" id="l9e-Hs-n0H"/>
                                         </connections>

@@ -25,7 +25,7 @@
 
 @interface OrderDetail2VC ()<UITableViewDelegate,UITableViewDataSource,OrderDetailCell2Delegate>
 {
-    
+    ShoppingCarUnderView *_underView;
     GoodsModel *_operateGoodsModel;
     UIButton *_backMoneyButton;
     UIButton *_backProButton;
@@ -33,7 +33,7 @@
     CGFloat _discountPrice;
     
 }
-@property (nonatomic,strong) ShoppingCarUnderView *underView;
+
 @end
 
 @implementation OrderDetail2VC
@@ -54,8 +54,8 @@
 {
     NSDictionary *dic = @{@"receiptId":_orderId,
                           };
-    __weak __typeof(self)weakSelf = self;
-    [HttpRequestManager postOrderDetilInfoRequest:dic viewcontroller:weakSelf finishBlock:^(OrderDetailModel *model) {
+    
+    [HttpRequestManager postOrderDetilInfoRequest:dic viewcontroller:self finishBlock:^(OrderDetailModel *model) {
         _model = model;
         
 //        _model.type = _type;
@@ -133,22 +133,20 @@
 
 //查看物流
 -(void)otherOperate:(UIButton *)sender{
-    __weak __typeof(self)weakSelf = self;
     if ([sender.titleLabel.text isEqualToString:@"删除"]) {
-        
         //删除
         [[MyAlert manage] showBtnAlertWithTitle:@"提醒" detailTitle:@"是否删除订单？" confirm:^{
-            NSDictionary *dic = @{@"receiptId":weakSelf.model.receiptId,
+            NSDictionary *dic = @{@"receiptId":_model.receiptId,
                                   };
             
-            [HttpRequestManager postOrderDeletRequest:dic viewcontroller:weakSelf finishBlock:^(NSDictionary *data) {
+            [HttpRequestManager postOrderDeletRequest:dic viewcontroller:self finishBlock:^(NSDictionary *data) {
                 //删除订单成功
-                [weakSelf.navigationController popViewControllerAnimated:YES];
+                [self.navigationController popViewControllerAnimated:YES];
             }];
         }];
     }else{
         logisticsInfoViewController *vc = [[logisticsInfoViewController alloc]init];
-        [weakSelf.navigationController pushViewController:vc animated:YES];
+        [self.navigationController pushViewController:vc animated:YES];
     }
     
 }
@@ -240,26 +238,25 @@
 
 -(void)payAction
 {
-    __weak __typeof(self)weakSelf = self;
     [[MyAlert manage]payWaysAlert:^(NSString *str) {
-        NSDictionary *dic = @{@"receiptId":weakSelf.model.receiptId,
+        NSDictionary *dic = @{@"receiptId":_model.receiptId,
                               @"payMethod":str
                                   };
         
-        [HttpRequestManager postOrderRepayRequest:dic viewcontroller:weakSelf finishBlock:^(NSDictionary *data) {
+        [HttpRequestManager postOrderRepayRequest:dic viewcontroller:self finishBlock:^(NSDictionary *data) {
             if (data) {
                 if (data[@"pk"]) {
                     PayWebViewController *vc = [[PayWebViewController alloc]init];
                     vc.isFirst = @"first";
                     vc.html = data[@"pk"];
-                    [weakSelf.navigationController pushViewController:vc animated:YES];
+                    [self.navigationController pushViewController:vc animated:YES];
                 }else{
-                    weakSelf.type = @"待收货";
-                    weakSelf.model.type = @"待收货";
-                    [weakSelf.underView.btn1 setTitle:@"确认收货" forState:UIControlStateNormal];
-                    [weakSelf.tableView reloadData];
+                    _type = @"待收货";
+                    _model.type = @"待收货";
+                    [_underView.btn1 setTitle:@"确认收货" forState:UIControlStateNormal];
+                    [self.tableView reloadData];
                     
-                    weakSelf.allordervc.callback();
+                    self.allordervc.callback();
                 }
                 
                 
@@ -278,22 +275,22 @@
 -(void)souhuoAction
 {
     
-    __weak __typeof(self)weakSelf = self;
+    
     [[MyAlert manage] showBtnAlertWithTitle:@"提醒" detailTitle:@"是否确认收货？" confirm:^{
         
-        NSDictionary *dic = @{@"receiptId":weakSelf.model.receiptId,
+        NSDictionary *dic = @{@"receiptId":_model.receiptId,
                               };
         
-        [HttpRequestManager postOrderSouhuoRequest:dic viewcontroller:weakSelf finishBlock:^(NSDictionary *data) {
+        [HttpRequestManager postOrderSouhuoRequest:dic viewcontroller:self finishBlock:^(NSDictionary *data) {
             //        self.allordervc.callback();
-            weakSelf.type = @"待评价";
+            _type = @"待评价";
             
-            weakSelf.model.type = @"待评价";
-            [weakSelf.underView.btn1 setTitle:@"评价" forState:UIControlStateNormal];
-            [weakSelf.tableView reloadData];
+            _model.type = @"待评价";
+            [_underView.btn1 setTitle:@"评价" forState:UIControlStateNormal];
+            [self.tableView reloadData];
             
-            if (!weakSelf.ispay) {
-                weakSelf.allordervc.callback();
+            if (!self.ispay) {
+                self.allordervc.callback();
                 
             }
             
@@ -311,34 +308,35 @@
 ////        self.allordervc.callback();
 //
 //    }];
-    __weak __typeof(self)weakSelf = self;
-    NSDictionary *dic = @{@"receiptId":weakSelf.model.receiptId,
+    
+    NSDictionary *dic = @{@"receiptId":_model.receiptId,
                           };
     
 
     
-    [HttpRequestManager postOrderCommentListRequest:dic viewcontroller:weakSelf finishBlock:^(NSDictionary *data) {
+    [HttpRequestManager postOrderCommentListRequest:dic viewcontroller:self finishBlock:^(NSDictionary *data) {
         NSArray *arr = data[@"info"];
         
         
         OrderModel *ordermodel = [[OrderModel alloc]init];
-        ordermodel.ID = weakSelf.model.receiptId;
-        ordermodel.goodsArr = weakSelf.model.goodsArr;
-        ordermodel.time = weakSelf.model.timeStr;
+        ordermodel.ID = _model.receiptId;
+        ordermodel.goodsArr = _model.goodsArr;
+        ordermodel.time = _model.timeStr;
         
         GoodsCommentVC *vc = [[GoodsCommentVC alloc]init];
+        
         [vc setCallback:^{
-            weakSelf.type = @"已完成";
+            _type = @"已完成";
 
-            weakSelf.model.type = @"已完成";
-            [weakSelf.underView.btn1 setTitle:@"再次购买" forState:UIControlStateNormal];
-            [weakSelf.tableView reloadData];
+            _model.type = @"已完成";
+            [_underView.btn1 setTitle:@"再次购买" forState:UIControlStateNormal];
+            [self.tableView reloadData];
             
-            weakSelf.allordervc.callback();
+            self.allordervc.callback();
         }];
         vc.orderModel = ordermodel;
         vc.pinglunListArr = arr;
-        [weakSelf.navigationController pushViewController:vc animated:YES];
+        [self.navigationController pushViewController:vc animated:YES];
     }];
 
     
@@ -414,19 +412,18 @@
         
         
         alert.view.layer.masksToBounds = YES;
-        __weak __typeof(self)weakSelf = self;
         UIAlertAction *a1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
         UIAlertAction *a2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             BackProductApplyViewController *vc = [[BackProductApplyViewController alloc]init];
             vc.goodsModel = _operateGoodsModel;
-            vc.orderDetailModel = weakSelf.model;
+            vc.orderDetailModel = _model;
             if (_backMoneyButton.selected) {
                 vc.type = @(1);
             }else{
                 vc.type = @(2);
             }
             vc.backAllPrice = actualPrice;
-            [weakSelf.navigationController pushViewController:vc animated:YES];
+            [self.navigationController pushViewController:vc animated:YES];
         }];
         
         [alert addAction:a1];
@@ -460,7 +457,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellid = @"OrderDetailCell";
-    OrderDetailCell2 *cell  = [[OrderDetailCell2 alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid InspectModel:_model IndexPath:indexPath];
+    OrderDetailCell2 *cell  = [[OrderDetailCell2 alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid InspectModel:_model IndexPath:indexPath VC:self];
     cell.orderDetailCell2Delegate = self;
     if (indexPath.row==6) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

@@ -24,7 +24,6 @@
     self.myTableView = [[MyPigFirstLevelTableView alloc]initWithFrame:CGRectMake(0, 0, KHScreenW-16, KHScreenH-130)];
     self.myTableView.myPigFirstLevelTableViewDelegate = self;
     [self.view addSubview:self.myTableView];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -36,7 +35,6 @@
     [HttpRequestManager getPigListWithFinishBlock:^(NSArray *datas) {
         if (datas) {
             self.myTableView.myPigs = datas;
-            
         }
     }];
 }
@@ -50,13 +48,16 @@
     if ([title isEqualToString:@"发起变售"]) {
         NSTimeInterval time = model.payTime.longValue+30*24*3600*1000.0;
         if (time>[LUtils getSystemCurrentTime]) {
+            
+            [[MyAlert manage] showNoBtnAlertWithTitle:@"提醒" detailTitle:@"变售需要早购买一个月之后方能发起"];
+
+            
+        }else{
             [[MyAlert manage]showBtnAlertWithTitle:@"温馨提示" detailTitle:@"发起变售请先下载新版本" confirm:^{
                 
                 //跳转appstore
                 
             }];
-        }else{
-            [[MyAlert manage] showNoBtnAlertWithTitle:@"提醒" detailTitle:@"变售需要早购买一个月之后方能发起"];
         }
         
     }else if ([title isEqualToString:@"删除"]){
@@ -113,15 +114,14 @@
 
 -(void)buyActionWithModel:(MyPigListModel *)model{
     [[NSNotificationCenter defaultCenter]postNotificationName:@"购买凭证" object:@[@"购买凭证",model.buyContractUrl]];
-    
 }
 
 -(void)consumeActionWithModel:(MyPigListModel *)model andTitle:(NSString *)title{
     [[NSNotificationCenter defaultCenter]postNotificationName:@"购买凭证" object:@[title,model.contractUrl]];
 }
 
--(void)pigGifted{
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"猪种礼包" object:nil];
+- (void)pigGiftedWithModel:(MyPigListModel *)model{
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"猪种礼包" object:model];
 }
 
 @end

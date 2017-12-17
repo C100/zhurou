@@ -33,6 +33,7 @@
 @property(nonatomic, strong) NSString *buyContractUrl;
 @property(nonatomic, strong) NSNumber *state;
 @property(nonatomic, strong) NSString *goodsName;
+@property (nonatomic, strong) NSString *goodsImg;
 
 //购买凭证
 @property(nonatomic, strong) NSString *contractUrl;

@@ -143,7 +143,8 @@
         case 0://未支付
         {
             self.iconImageView.image = [UIImage imageNamed:@"待支付"];
-            [self.leftButton setTitle:@"删除" forState:UIControlStateNormal];
+//            [self.leftButton setTitle:@"删除" forState:UIControlStateNormal];
+            self.leftButton.hidden = YES;
             [self.rightButton setTitle:@"付款" forState:UIControlStateNormal];
             self.buyButton.hidden = YES;
             self.consumeButton.hidden = YES;

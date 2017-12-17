@@ -143,7 +143,6 @@
     if (_dataModel.phone.length == 0) {
         [[MyAlert manage] showNoBtnAlertWithTitle:@"警告" detailTitle:@"手机号不能为空"];
         return;
-        
     }
   
     if (![_dataModel.phone isValidateMobile]) {

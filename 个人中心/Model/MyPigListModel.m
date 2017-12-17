@@ -40,6 +40,7 @@
         self.normalContractUrl = [dic objectForKey:@"normalContractUrl"];
         self.endPrice = [dic objectForKey:@"endPrice"];
         self.proportion = [dic objectForKey:@"proportion"];
+        self.goodsImg = [dic objectForKey:@"goodsImg"];
     }
     return self;
     

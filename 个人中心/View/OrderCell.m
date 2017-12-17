@@ -12,6 +12,7 @@
 @interface OrderCell()<UITextFieldDelegate>
 {
     OrderModel *_model;
+    UIViewController *_vc;
 }
 @end
 
@@ -21,6 +22,7 @@
 
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier InspectModel:(OrderModel *)model IndexPath:(NSIndexPath *)indexPath
+                          VC:(UIViewController *)vc
 {
 
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];

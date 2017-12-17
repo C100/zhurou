@@ -178,7 +178,7 @@
         
     }else
     {
-        GoodsDetailCell *cell = [[GoodsDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GoodsDetailCell" model:_dataModel index:indexPath];
+        GoodsDetailCell *cell = [[GoodsDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GoodsDetailCell" model:_dataModel index:indexPath uiviewcontroller:self];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }

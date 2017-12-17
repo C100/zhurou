@@ -118,7 +118,10 @@
 
 -(void)editAddressAction:(UIButton *)btn
 {
+    
     AddressModel *model = _tableViewDataArray[btn.tag - 100];
+
+    
     creatAddressVC *VC = [[creatAddressVC alloc]init];
     VC.addressVc = self;
     if ([model.ID integerValue] == [_orderAdressId integerValue]  && _orderAdressId) {

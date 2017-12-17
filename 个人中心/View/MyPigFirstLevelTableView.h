@@ -15,7 +15,7 @@
 -(void)consumeActionWithModel:(MyPigListModel *)model andTitle:(NSString *)title;
 -(void)leftButtonActionWithModel:(MyPigListModel *)model andTitle:(NSString *)title;
 -(void)rightButtonActionWithModel:(MyPigListModel *)model andTitle:(NSString *)title;
--(void)pigGifted;
+-(void)pigGiftedWithModel:(MyPigListModel *)model;
 
 - (void)enterOrderDetail;
 

@@ -15,6 +15,7 @@
 @interface OrderDetailCell2()<UITextFieldDelegate>
 {
     OrderDetailModel *_model;
+    UIViewController *_vc;
 }
 @end
 
@@ -24,8 +25,11 @@
 
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier InspectModel:(OrderDetailModel *)model IndexPath:(NSIndexPath *)indexPath
+                          VC:(UIViewController *)vc
 {
     
+    
+    _vc=vc;
     _model=model;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     CommonCellView*commonView= [[CommonCellView alloc] init];

@@ -36,15 +36,16 @@
     cell.listModel = self.myPigs[indexPath.section];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [cell.buyButton addTarget:self action:@selector(buyAction:) forControlEvents:UIControlEventTouchUpInside];
-    cell.buyButton.tag = 100+indexPath.row;
+    cell.buyButton.tag = 100+indexPath.section;
     [cell.consumeButton addTarget:self action:@selector(consumeAction:) forControlEvents:UIControlEventTouchUpInside];
-    cell.consumeButton.tag = 200+indexPath.row;
+    cell.consumeButton.tag = 200+indexPath.section;
     [cell.leftButton addTarget:self action:@selector(leftButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    cell.leftButton.tag = 300+indexPath.row;
+    cell.leftButton.tag = 300+indexPath.section;
     [cell.rightButton addTarget:self action:@selector(rightButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    cell.rightButton.tag = 400+indexPath.row;
+    cell.rightButton.tag = 400+indexPath.section;
     [cell.giftedButton addTarget:self action:@selector(giftedAction:) forControlEvents:UIControlEventTouchUpInside];
-    cell.giftedButton.tag = 500+indexPath.row;
+    cell.giftedButton.tag = 500+indexPath.section;
+    
     return cell;
 }
 
@@ -87,7 +88,9 @@
 }
 
 -(void)giftedAction:(UIButton *)sender{
-    [self.myPigFirstLevelTableViewDelegate pigGifted];
+    MyPigListModel *listModel = self.myPigs[sender.tag-500];
+
+    [self.myPigFirstLevelTableViewDelegate pigGiftedWithModel:listModel];
 }
 
 -(void)setMyPigs:(NSArray *)myPigs{

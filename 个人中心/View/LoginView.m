@@ -11,8 +11,7 @@
 @implementation LoginView
 
 -(instancetype)init{
-    self=[super init];
-    if (self) {
+    if (self = [super init]) {
         self.contents = @[@"请输入您的手机号",@"请输入6-16位数字和字母密码"];
         self.images = @[@"输入手机号码",@"输入短信验证码"];
         for (int i = 0; i<2; i++) {
@@ -95,9 +94,9 @@
         make.right.mas_equalTo(-16);
         make.height.mas_equalTo(1);
     }];
-
+    
     sender.attributedPlaceholder = [[NSMutableAttributedString alloc]initWithString:sender.placeholder attributes:@{NSFontAttributeName:kFont(16),NSForegroundColorAttributeName:kAEAEAEColor}];
-
+    
     if (sender.tag==101) {
         sender.secureTextEntry = YES;
         self.eyeButton = [[UIButton alloc]init];
@@ -110,10 +109,10 @@
             make.bottom.mas_equalTo(lineView.mas_top).mas_equalTo(-3);
             make.size.mas_equalTo(CGSizeMake(25, 25));
         }];
-
+        
         self.lastView = lineView;
     }
-
+    
 }
 
 @end

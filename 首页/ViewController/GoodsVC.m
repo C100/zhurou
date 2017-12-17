@@ -21,57 +21,57 @@
 #define ScreenSize  ([UIScreen mainScreen].bounds.size)
 @interface GoodsVC ()<UIPageViewControllerDataSource,UIPageViewControllerDelegate,UIScrollViewDelegate>
 {
-    
+    UIButton *_commentBtn;
     GoodsDetailModel *_dataModel;
+
 }
 
 @property (nonatomic, strong)  NSArray *btnArr;
 @property(nonatomic,strong) NSMutableArray *viewControllerArray;
 @property (nonatomic, strong)UIPageViewController *pageController;
 @property (nonatomic, assign)NSInteger currentPageIndex;
-@property (nonatomic,strong) UIButton *commentBtn;
 @end
 
 @implementation GoodsVC
 /**
  *  只需要修改的第一处
  */
-//- (NSArray *)btnArr{
-//    if (!_btnArr) {
-//        _btnArr =  @[@"详情",@"规格",@"推荐",@"评论",];
-//    }
-//    return _btnArr;
-//}
+- (NSArray *)btnArr{
+    if (!_btnArr) {
+        _btnArr =  @[@"详情",@"规格",@"推荐",@"评论",];
+    }
+    return _btnArr;
+}
 
 /**
  *  只需要修改的第二处
  */
-//- (NSMutableArray *)viewControllerArray{
-//    if (!_viewControllerArray) {
-//
-//        _dataModel = [[GoodsDetailModel alloc]init];
-//
-//        _viewControllerArray = [[NSMutableArray alloc]init];
-//        GoodsDetailVC *FController = [[GoodsDetailVC alloc]init];
-////        FController.dataModel = _dataModel;
-//
-//        __weak __typeof(self)weakSelf = self;
-//        [FController setMoreCommentcallback:^{
-//            [weakSelf changeControllerClick:weakSelf.commentBtn];
-//        }];
-//        FController.goodsID = self.goodIds;
-//        SpecVC *SController = [[SpecVC alloc]init];
-//        RecommendVC *TController = [[RecommendVC alloc]init];
-//        CommentVC *TController2 = [[CommentVC alloc]init];
-//        [_viewControllerArray addObjectsFromArray:@[FController,SController,TController,TController2]];
-//    }
-//    return _viewControllerArray;
-//}
+- (NSMutableArray *)viewControllerArray{
+    if (!_viewControllerArray) {
+
+        _dataModel = [[GoodsDetailModel alloc]init];
+        
+        _viewControllerArray = [[NSMutableArray alloc]init];
+        GoodsDetailVC *FController = [[GoodsDetailVC alloc]init];
+//        FController.dataModel = _dataModel;
+        [FController setMoreCommentcallback:^{
+            [self changeControllerClick:_commentBtn];
+        }];
+        FController.goodsID = self.goodIds;
+        SpecVC *SController = [[SpecVC alloc]init];
+        RecommendVC *TController = [[RecommendVC alloc]init];
+        CommentVC *TController2 = [[CommentVC alloc]init];
+        [_viewControllerArray addObjectsFromArray:@[FController,SController,TController,TController2]];
+    }
+    return _viewControllerArray;
+}
 
 -(void)viewDidLoad
 {
+    
     [self initMainController];
-    //[self setupPageViewController];
+    [self setupPageViewController];
+    
     if (!getUserId) {
         MyAlert *alert = [MyAlert manage];
         [alert showBtnAlertWithTitle:@"提醒" detailTitle:@"您还未登录是否登录？" button1Title:@"取消" button2Title:@"确定" confirm:^{
@@ -192,190 +192,191 @@
 }
 
 
-//- (UIPageViewController *)pageController{
-//    if (!_pageController) {
-//        _pageController = [[UIPageViewController alloc]initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
-//        _pageController.view.frame = CGRectMake(0, 41, ScreenSize.width, ScreenSize.height - 41);
-//        _pageController.delegate = self;
-//        _pageController.dataSource = self;
-//        [_pageController setViewControllers:@[[self.viewControllerArray objectAtIndex:_currentPageIndex]] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-//    }
-//    return _pageController;
-//}
-
+- (UIPageViewController *)pageController{
+    if (!_pageController) {
+        _pageController = [[UIPageViewController alloc]initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+        _pageController.view.frame = CGRectMake(0, 41, ScreenSize.width, ScreenSize.height - 41);
+        _pageController.delegate = self;
+        _pageController.dataSource = self;
+        [_pageController setViewControllers:@[[self.viewControllerArray objectAtIndex:_currentPageIndex]] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+        
+    }
+    return _pageController;
+}
 //初始化导航控制器
 -(void)initMainController{
     
     
 //    self.title = @"产品详情";
     self.view.backgroundColor = [UIColor whiteColor];
-//    UILabel *theLine = [[UILabel alloc]init];
-//    for (int i = 0; i < self.btnArr.count; i ++) {
-//        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//        CGSize  size = [self.btnArr[0] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"ZHSRXT--GBK1-0" size:20]}];
-//        //        btn.titleLabel.font = [UIFont fontWithName:@"FZLTXHK--GBK1-0" size:16];
-//
-//        [btn setTitle:self.btnArr[i] forState:UIControlStateNormal];
-//        [btn setTitleColor:The_TitleColor forState:UIControlStateNormal];
-//        [btn setTitleColor:The_MainColor forState:UIControlStateSelected];
-//        //        btn.titleLabel.font = [UIFont boldSystemFontOfSize:16];
-//        btn.titleLabel.font = [UIFont fontWithName:The_titleFont size:16];
-//
-//
-//        btn.frame = CGRectMake(0 + i*KHScreenW/self.btnArr.count,  0 , KHScreenW/self.btnArr.count, 40);
-//
-//        btn.tag = BtnTag + i;
-//        if (i == _currentPageIndex) {
-//            btn.selected = YES;
-//
-//            theLine .frame = CGRectMake(btn.frame.origin.x + ((btn.frame.size.width)/2 - (size.width)/2),40,size.width, 1);
-//            theLine.tag = 2000;
-//        }
-//        if (i==3) {
-//            _commentBtn = btn;
-//        }
-//        [btn addTarget:self action:@selector(changeControllerClick:) forControlEvents:UIControlEventTouchUpInside];
-//        [self.view addSubview:btn];
-//    }
-//
-//    theLine.backgroundColor = The_MainColor;
-//    [self.view addSubview:theLine];
-    GoodsDetailVC *goodDetailVc=[[GoodsDetailVC alloc] init];
-    goodDetailVc.goodsID=_goodIds;
-    [self addChildViewController:goodDetailVc];
-    [self.view addSubview:goodDetailVc.view];
+    UILabel *theLine = [[UILabel alloc]init];
+    for (int i = 0; i < self.btnArr.count; i ++) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        CGSize  size = [self.btnArr[0] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"ZHSRXT--GBK1-0" size:20]}];
+        //        btn.titleLabel.font = [UIFont fontWithName:@"FZLTXHK--GBK1-0" size:16];
+        
+        [btn setTitle:self.btnArr[i] forState:UIControlStateNormal];
+        [btn setTitleColor:The_TitleColor forState:UIControlStateNormal];
+        [btn setTitleColor:The_MainColor forState:UIControlStateSelected];
+        //        btn.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+        btn.titleLabel.font = [UIFont fontWithName:The_titleFont size:16];
+        
+        
+        btn.frame = CGRectMake(0 + i*KHScreenW/self.btnArr.count,  0 , KHScreenW/self.btnArr.count, 40);
+        
+        btn.tag = BtnTag + i;
+        if (i == _currentPageIndex) {
+            btn.selected = YES;
+            
+            theLine .frame = CGRectMake(btn.frame.origin.x + ((btn.frame.size.width)/2 - (size.width)/2),40,size.width, 1);
+            theLine.tag = 2000;
+        }
+        if (i==3) {
+            _commentBtn = btn;
+        }
+        [btn addTarget:self action:@selector(changeControllerClick:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:btn];
+    }
+    
+    theLine.backgroundColor = The_MainColor;
+    [self.view addSubview:theLine];
+    
 }
 
 
 #pragma mark naviationButtonAction
+
+
+
 -(void)setupPageViewController{
-    //[self addChildViewController:self.pageController];
-    //[self.view addSubview:self.pageController.view];
-    //[self syncScrollView];
+    [self addChildViewController:self.pageController];
+    [self.view addSubview:self.pageController.view];
+    [self syncScrollView];
 }
-//-(void)syncScrollView{
-//    for (UIView *view in self.pageController.view.subviews) {
-//        if ([view isKindOfClass:[UIScrollView class]]) {
-//            UIScrollView *pageScrollView = (UIScrollView *)view;
-//            pageScrollView.delegate = self;
-//            pageScrollView.scrollsToTop=NO;
-//        }
-//    }
-//}
-//-(void)changeControllerClick:(id)sender{
-//    UIButton *btn = (UIButton *)sender;
-//    NSInteger tempIndex = _currentPageIndex;
-//    __weak typeof (self) weakSelf = self;
-//    NSInteger nowTemp = btn.tag - BtnTag;
-//    if (nowTemp > tempIndex) {
-//        for (int i = (int)tempIndex + 1; i <= nowTemp; i ++) {
-//            [weakSelf.pageController setViewControllers:@[[weakSelf.viewControllerArray objectAtIndex:i]] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
-//                if (finished) {
-//                    [weakSelf updateCurrentPageIndex:i];
-//                }
-//            }];
-//        }
-//    }else if (nowTemp < tempIndex){
-//        for (int i = (int)tempIndex ; i >= nowTemp; i--) {
-//            [weakSelf.pageController setViewControllers:@[[weakSelf.viewControllerArray objectAtIndex:i]] direction:UIPageViewControllerNavigationDirectionReverse animated:NO completion:^(BOOL finished) {
-//                if (finished) {
-//                    [weakSelf updateCurrentPageIndex:i];
-//                }
-//            }];
-//        }
-//    }
-//}
+-(void)syncScrollView{
+    for (UIView *view in self.pageController.view.subviews) {
+        if ([view isKindOfClass:[UIScrollView class]]) {
+            UIScrollView *pageScrollView = (UIScrollView *)view;
+            pageScrollView.delegate = self;
+            pageScrollView.scrollsToTop=NO;
+        }
+    }
+}
+-(void)changeControllerClick:(id)sender{
+    UIButton *btn = (UIButton *)sender;
+    NSInteger tempIndex = _currentPageIndex;
+    __weak typeof (self) weakSelf = self;
+    NSInteger nowTemp = btn.tag - BtnTag;
+    if (nowTemp > tempIndex) {
+        for (int i = (int)tempIndex + 1; i <= nowTemp; i ++) {
+            [_pageController setViewControllers:@[[self.viewControllerArray objectAtIndex:i]] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+                if (finished) {
+                    [weakSelf updateCurrentPageIndex:i];
+                }
+            }];
+        }
+    }else if (nowTemp < tempIndex){
+        for (int i = (int)tempIndex ; i >= nowTemp; i--) {
+            [_pageController setViewControllers:@[[self.viewControllerArray objectAtIndex:i]] direction:UIPageViewControllerNavigationDirectionReverse animated:NO completion:^(BOOL finished) {
+                if (finished) {
+                    [weakSelf updateCurrentPageIndex:i];
+                }
+            }];
+        }
+    }
+}
 
-//-(void)updateCurrentPageIndex:(NSInteger)newIndex
-//{
-//    _currentPageIndex = newIndex;
-//
-//    UIButton *btn = (UIButton *)[self.view viewWithTag:BtnTag+_currentPageIndex];
-//    for (int i = 0 ; i < self.btnArr.count; i ++) {
-//        UIButton *otherBtn = (UIButton *)[self.view viewWithTag:BtnTag + i];
-//        if (btn.tag == otherBtn.tag) {
-//            otherBtn.selected = YES;
-//        }else{
-//            otherBtn.selected = NO;
-//        }
-//    }
-//
-//
-//    CGSize  size = [self.btnArr[0] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:The_titleFont size:20]}];
-//
-//
-//    NSInteger X = _currentPageIndex;
-//    UIButton *btn2 = (UIButton *)[self.view viewWithTag:X+BtnTag];
-//    [UIView animateWithDuration:0.2 animations:^{
-//        UIView *line = (UIView *)[self.view viewWithTag:2000];
-//        CGRect sizeRect = line.frame;
-//        sizeRect.origin.x = btn2.frame.origin.x;
-//        line .frame = CGRectMake(btn2.frame.origin.x + ((btn2.frame.size.width)/2 - (size.width)/2), 40,size.width, 1);
-//
-//    }];
-//}
-//#pragma mark --------Scroll协议-------
-//-(void)scrollViewDidScroll:(UIScrollView *)scrollView
-//{
-//    CGSize  size = [self.btnArr[0] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:The_titleFont size:20]}];
-//
-//
-//    NSInteger X = _currentPageIndex;
-//    UIButton *btn = (UIButton *)[self.view viewWithTag:X+BtnTag];
-//    [UIView animateWithDuration:0.2 animations:^{
-//        UIView *line = (UIView *)[self.view viewWithTag:2000];
-//        CGRect sizeRect = line.frame;
-//        sizeRect.origin.x = btn.frame.origin.x;
-//        line .frame = CGRectMake(btn.frame.origin.x + ((btn.frame.size.width)/2 - (size.width)/2), 40,size.width, 1);
-//
-//        //        line.frame = CGRectMake(btn.frame.origin.x, 64 - 2, btn.frame.size.width, 2);
-//    }];
-//}
+-(void)updateCurrentPageIndex:(NSInteger)newIndex
+{
+    _currentPageIndex = newIndex;
+    
+    UIButton *btn = (UIButton *)[self.view viewWithTag:BtnTag+_currentPageIndex];
+    for (int i = 0 ; i < self.btnArr.count; i ++) {
+        UIButton *otherBtn = (UIButton *)[self.view viewWithTag:BtnTag + i];
+        if (btn.tag == otherBtn.tag) {
+            otherBtn.selected = YES;
+        }else{
+            otherBtn.selected = NO;
+        }
+    }
+    
+    
+    CGSize  size = [self.btnArr[0] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:The_titleFont size:20]}];
+    
+    
+    NSInteger X = _currentPageIndex;
+    UIButton *btn2 = (UIButton *)[self.view viewWithTag:X+BtnTag];
+    [UIView animateWithDuration:0.2 animations:^{
+        UIView *line = (UIView *)[self.view viewWithTag:2000];
+        CGRect sizeRect = line.frame;
+        sizeRect.origin.x = btn2.frame.origin.x;
+        line .frame = CGRectMake(btn2.frame.origin.x + ((btn2.frame.size.width)/2 - (size.width)/2), 40,size.width, 1);
+        
+    }];
+}
+#pragma mark --------Scroll协议-------
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGSize  size = [self.btnArr[0] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:The_titleFont size:20]}];
+    
+    
+    NSInteger X = _currentPageIndex;
+    UIButton *btn = (UIButton *)[self.view viewWithTag:X+BtnTag];
+    [UIView animateWithDuration:0.2 animations:^{
+        UIView *line = (UIView *)[self.view viewWithTag:2000];
+        CGRect sizeRect = line.frame;
+        sizeRect.origin.x = btn.frame.origin.x;
+        line .frame = CGRectMake(btn.frame.origin.x + ((btn.frame.size.width)/2 - (size.width)/2), 40,size.width, 1);
+        
+        //        line.frame = CGRectMake(btn.frame.origin.x, 64 - 2, btn.frame.size.width, 2);
+    }];
+}
 
-//#pragma mark - Page View Controller Data Source
-//
-//- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
-//{
-//    NSInteger index = [self indexOfController:viewController];
-//
-//    if ((index == NSNotFound) || (index == 0)) {
-//        return nil;
-//    }
-//
-//    index--;
-//    return [_viewControllerArray objectAtIndex:index];
-//}
-//
-//- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
-//{
-//    NSInteger index = [self indexOfController:viewController];
-//    index++;
-//
-//    if (index == [_viewControllerArray count]) {
-//        return nil;
-//    }
-//    return [_viewControllerArray objectAtIndex:index];
-//}
-//
-//-(void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
-//{
-//    if (completed) {
-//        _currentPageIndex = [self indexOfController:[pageViewController.viewControllers lastObject]];
-//        [self updateCurrentPageIndex:_currentPageIndex];
-//        NSLog(@"当前界面是界面=== %ld",_currentPageIndex);
-//    }
-//}
-//
-//-(NSInteger)indexOfController:(UIViewController *)viewController
-//{
-//    for (int i = 0; i<[_viewControllerArray count]; i++) {
-//        if (viewController == [_viewControllerArray objectAtIndex:i])
-//        {
-//            return i;
-//        }
-//    }
-//    return NSNotFound;
-//}
+#pragma mark - Page View Controller Data Source
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
+{
+    NSInteger index = [self indexOfController:viewController];
+    
+    if ((index == NSNotFound) || (index == 0)) {
+        return nil;
+    }
+    
+    index--;
+    return [_viewControllerArray objectAtIndex:index];
+}
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
+{
+    NSInteger index = [self indexOfController:viewController];
+    index++;
+    
+    if (index == [_viewControllerArray count]) {
+        return nil;
+    }
+    return [_viewControllerArray objectAtIndex:index];
+}
+
+-(void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
+{
+    if (completed) {
+        _currentPageIndex = [self indexOfController:[pageViewController.viewControllers lastObject]];
+        [self updateCurrentPageIndex:_currentPageIndex];
+        NSLog(@"当前界面是界面=== %ld",_currentPageIndex);
+    }
+}
+
+-(NSInteger)indexOfController:(UIViewController *)viewController
+{
+    for (int i = 0; i<[_viewControllerArray count]; i++) {
+        if (viewController == [_viewControllerArray objectAtIndex:i])
+        {
+            return i;
+        }
+    }
+    return NSNotFound;
+}
+
 
 
 
